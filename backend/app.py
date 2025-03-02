@@ -7,15 +7,11 @@ from flask_cors import CORS
 
 import os
 
-# Get the absolute path of the current file
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Gets the backend directory
+MODEL_PATH = os.path.join(BASE_DIR, "../models/pcos_gmm_model.pkl")  # Moves one level up
 
-# Define the correct model path
-MODEL_PATH = os.path.join(BASE_DIR, "models", "pcos_gmm_model.pkl")
-
-# Load the model
-with open(MODEL_PATH, "rb") as model_file:
-    model, feature_names = pickle.load(model_file)  # Unpack correctly
+# Load pre-trained model
+model, feature_names = pickle.load(open(MODEL_PATH, "rb"))
 
 app = Flask(__name__)
 CORS(app)  # Add this to enable cross-origin requests
