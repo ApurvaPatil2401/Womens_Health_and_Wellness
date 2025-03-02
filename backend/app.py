@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import pickle
 import numpy as np
 import pandas as pd
-from clustering import predict_cluster
+from backend.clustering import predict_cluster
 from flask_cors import CORS
 
 
