@@ -5,12 +5,17 @@ import pandas as pd
 from backend.clustering import predict_cluster
 from flask_cors import CORS
 
+import os
 
-
-# Load pre-trained model
-#model = pickle.load(open("../models/pcos_gmm_model.pkl", "rb"))
+# Get the absolute path of the current file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-model, feature_names = pickle.load(open("../models/pcos_gmm_model.pkl", "rb"))  # Unpack correctly
+
+# Define the correct model path
+MODEL_PATH = os.path.join(BASE_DIR, "models", "pcos_gmm_model.pkl")
+
+# Load the model
+with open(MODEL_PATH, "rb") as model_file:
+    model, feature_names = pickle.load(model_file)  # Unpack correctly
 
 app = Flask(__name__)
 CORS(app)  # Add this to enable cross-origin requests
