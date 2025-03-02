@@ -9,6 +9,7 @@ from flask_cors import CORS
 
 # Load pre-trained model
 #model = pickle.load(open("../models/pcos_gmm_model.pkl", "rb"))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 model, feature_names = pickle.load(open("../models/pcos_gmm_model.pkl", "rb"))  # Unpack correctly
 
 app = Flask(__name__)
@@ -42,4 +43,4 @@ def predict():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+     app.run(debug=True, host="0.0.0.0", port=5000)
