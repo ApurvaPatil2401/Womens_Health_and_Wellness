@@ -4,50 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health & Wellness</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../static/styles.css">
+
 </head>
-<body>
+<body class="light-mode">
     <header>
-        <h1>Personalized Health Advisor</h1>
+        Women's Health & Wellness Advisor
     </header>
+    
+    <!-- Dark Mode Toggle -->
+    <button id="theme-toggle">🌙 Toggle Dark Mode</button>
+
     <main>
-        <section class="input-section">
-            <h2>Enter Your Details</h2>
-            <form id="health-form">
+        <form id="health-form">
+            <div class="input-section">
                 <label for="age">Age:</label>
-                <input type="number" id="age" name="age" required>
-                
-                <label for="weight">Weight (Kg):</label>
-                <input type="number" id="weight" name="weight" required>
-                
+                <input type="number" id="age" required>
+            </div>
+
+            <div class="input-section">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" required>
+            </div>
+
+            <div class="input-section">
                 <label for="height">Height (cm):</label>
-                <input type="number" id="height" name="height" required>
-                
+                <input type="number" id="height" required>
+            </div>
+
+            <div class="input-section">
                 <label for="bmi">BMI:</label>
                 <input type="number" id="bmi" name="bmi" step="0.1" required>
-                
-                <label for="exercise">Regular Exercise (Y/N):</label>
-                <select id="exercise" name="exercise">
+
+            </div>
+
+            <div class="input-section">
+                <label for="exercise">Do you exercise regularly?</label>
+                <select id="exercise">
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                 </select>
-                
-                <button type="submit">Get Recommendation</button>
-            </form>
-        </section>
-        <section class="result-section">
-            <h2>Health Recommendation</h2>
-            <p id="result">Your personalized recommendation will appear here.</p>
-        </section>
+            </div>
+
+            <button type="submit">Get Recommendation</button>
+        </form>
+
+        <div class="result-section">
+            <div id="loader" class="hidden"></div>
+            <h2>Recommendation:</h2>
+            <p id="result"></p>
+        </div>
     </main>
+
     <script>
+        // Dark Mode Toggle
+        document.getElementById("theme-toggle").addEventListener("click", function() {
+            document.body.classList.toggle("dark-mode");
+            if (document.body.classList.contains("dark-mode")) {
+                this.textContent = "☀️ Light Mode";
+            } else {
+                this.textContent = "🌙 Dark Mode";
+            }
+        });
+
+        // Form Submission
         document.getElementById("health-form").addEventListener("submit", function(event) {
             event.preventDefault();
-            document.getElementById("result").textContent = "Processing your details...";
-        
-            // Convert categorical value (exercise) into numerical (1 for Yes, 0 for No)
-            let exerciseValue = document.getElementById("exercise").value === "yes" ? 1 : 0;
-        
+            document.getElementById("result").textContent = "";
+            document.getElementById("result").classList.remove("show");
+            document.getElementById("loader").classList.remove("hidden");
+
             fetch("http://127.0.0.1:5000/predict", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -57,24 +83,17 @@
                         parseFloat(document.getElementById("weight").value),
                         parseFloat(document.getElementById("height").value),
                         parseFloat(document.getElementById("bmi").value),
-                        exerciseValue
+                        document.getElementById("exercise").value === "yes" ? 1 : 0
                     ]
                 })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.recommendation) {
-                    document.getElementById("result").textContent = data.recommendation;
-                } else {
-                    document.getElementById("result").textContent = "Error: " + (data.error || "Invalid response");
-                }
-            })
-            .catch(error => {
-                document.getElementById("result").textContent = "Error fetching recommendation.";
-                console.error("Error:", error);
+                document.getElementById("loader").classList.add("hidden");
+                document.getElementById("result").textContent = data.recommendation;
+                document.getElementById("result").classList.add("show");
             });
         });
-        
     </script>
 </body>
 </html>
