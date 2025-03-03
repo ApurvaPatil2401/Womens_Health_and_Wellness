@@ -1,0 +1,5 @@
+buildCommand: ""
+startCommand: "python backend/app.py"
+include:
+  - frontend/templates/
+  - frontend/static/
