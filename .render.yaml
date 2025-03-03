@@ -1,5 +1,3 @@
-buildCommand: ""
-startCommand: "python backend/app.py"
-include:
-  - frontend/templates/
-  - frontend/static/
+buildCommand: "pip install -r requirements.txt"
+startCommand: "gunicorn backend.app:app"
+staticPublishPath: "frontend/static"
