@@ -74,7 +74,7 @@
             document.getElementById("result").classList.remove("show");
             document.getElementById("loader").classList.remove("hidden");
 
-            fetch("http://127.0.0.1:5000/predict", {
+            fetch("https://health-advisor-urce.onrender.com/predict", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -92,6 +92,11 @@
                 document.getElementById("loader").classList.add("hidden");
                 document.getElementById("result").textContent = data.recommendation;
                 document.getElementById("result").classList.add("show");
+            })
+            .catch(error => {
+                document.getElementById("loader").classList.add("hidden");
+                document.getElementById("result").textContent = "Error: Unable to connect to the server.";
+                console.error("API Error:", error);
             });
         });
     </script>
