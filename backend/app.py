@@ -12,7 +12,11 @@ MODEL_PATH = os.path.join(BASE_DIR, "../models/pcos_gmm_model.pkl")  # Moves one
 # Load pre-trained model
 model, feature_names = pickle.load(open(MODEL_PATH, "rb"))
 
-app = Flask(__name__, template_folder="frontend/templates", static_folder="frontend/static")
+
+TEMPLATE_DIR = os.path.join(BASE_DIR, "../frontend/templates")  # Go up one level
+STATIC_DIR = os.path.join(BASE_DIR, "../frontend/static")
+
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 CORS(app)  # Enable cross-origin requests
 
 @app.route("/")
