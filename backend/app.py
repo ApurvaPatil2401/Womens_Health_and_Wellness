@@ -1,24 +1,24 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import pickle
 import numpy as np
 import pandas as pd
 from backend.clustering import predict_cluster
 from flask_cors import CORS
-
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Gets the backend directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Get backend directory
 MODEL_PATH = os.path.join(BASE_DIR, "../models/pcos_gmm_model.pkl")  # Moves one level up
 
 # Load pre-trained model
 model, feature_names = pickle.load(open(MODEL_PATH, "rb"))
 
-app = Flask(__name__)
-CORS(app)  # Add this to enable cross-origin requests
+app = Flask(__name__, template_folder="frontend/templates", static_folder="frontend/static")
+CORS(app)  # Enable cross-origin requests
 
 @app.route("/")
-def home():
-    return "Welcome to PCOS Health Advisor API"
+def index():
+    """Serve the frontend index.html from templates."""
+    return render_template("index.html")
 
 @app.route("/predict", methods=["POST"])
 def predict():
