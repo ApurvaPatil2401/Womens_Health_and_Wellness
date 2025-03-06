@@ -27,7 +27,7 @@ import pickle
 import numpy as np
 import pandas as pd
 from flask_cors import CORS
-from preprocess import preprocess_data
+from backend.preprocess import preprocess_data
 import os
 from sklearn.preprocessing import MinMaxScaler  
 
