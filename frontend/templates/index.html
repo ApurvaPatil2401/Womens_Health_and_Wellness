@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health & Wellness</title>
     <link rel="stylesheet" href="../static/styles.css">
-
 </head>
 <body class="light-mode">
     <header>
         Women's Health & Wellness Advisor
     </header>
-    
     <!-- Dark Mode Toggle -->
     <button id="theme-toggle">🌙 Toggle Dark Mode</button>
 
@@ -46,6 +44,65 @@
                 </select>
             </div>
 
+                <label for="age">Age (yrs):</label>
+                <input type="number" id="age" required>
+            </div>
+            
+            <div class="input-section">
+                <label for="weight">Weight (Kg):</label>
+                <input type="number" id="weight" required>
+            </div>
+            
+            <div class="input-section">
+                <label for="height">Height (Cm):</label>
+                <input type="number" id="height" required>
+            </div>
+            
+            <div class="input-section">
+                <label for="bmi">BMI:</label>
+                <input type="number" id="bmi" step="0.1" required>
+            </div>
+            
+            <div class="input-section">
+                <label for="exercise">Regular Exercise:</label>
+                <select id="exercise">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            
+            <div class="input-section">
+                <label for="hair-loss">Hair Loss:</label>
+                <select id="hair-loss">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            
+            <div class="input-section">
+                <label for="pimples">Pimples:</label>
+                <select id="pimples">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            
+            <div class="input-section">
+                <label for="skin-darkening">Skin Darkening:</label>
+                <select id="skin-darkening">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            
+            <div class="input-section">
+                <label for="fast-food">Fast Food Consumption:</label>
+                <select id="fast-food">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            
             <button type="submit">Get Recommendation</button>
         </form>
 
@@ -53,6 +110,12 @@
             <div id="loader" class="hidden"></div>
             <h2>Recommendation:</h2>
             <p id="result"></p>
+
+            <div id="loader" class="hidden">Result & Recommendation</div>
+            <h2>PCOS Risk Level:</h2>
+            <p id="risk"></p>
+            <h3>Recommendation:</h3>
+            <p id="recommendation"></p>
         </div>
     </main>
 
@@ -86,6 +149,36 @@
                         document.getElementById("exercise").value === "yes" ? 1 : 0
                     ]
                 })
+
+        document.getElementById("theme-toggle").addEventListener("click", function() {
+            document.body.classList.toggle("dark-mode");
+            this.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+        });
+
+        document.getElementById("health-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            document.getElementById("risk").textContent = "";
+            document.getElementById("recommendation").textContent = "";
+            document.getElementById("loader").classList.remove("hidden");
+
+            const inputData = {
+                features: {
+                    "Age (yrs)": parseFloat(document.getElementById("age").value),
+                    "Weight (Kg)": parseFloat(document.getElementById("weight").value),
+                    "Height(Cm)": parseFloat(document.getElementById("height").value),
+                    "BMI": parseFloat(document.getElementById("bmi").value),
+                    "Reg.Exercise(Y/N)": parseInt(document.getElementById("exercise").value),
+                    "Hair loss(Y/N)": parseInt(document.getElementById("hair-loss").value),
+                    "Pimples(Y/N)": parseInt(document.getElementById("pimples").value),
+                    "Skin darkening (Y/N)": parseInt(document.getElementById("skin-darkening").value),
+                    "Fast food (Y/N)": parseInt(document.getElementById("fast-food").value)
+                }
+            };
+
+            fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(inputData)
             })
             .then(response => response.json())
             .then(data => {
@@ -96,6 +189,12 @@
             .catch(error => {
                 document.getElementById("loader").classList.add("hidden");
                 document.getElementById("result").textContent = "Error: Unable to connect to the server.";
+                document.getElementById("risk").textContent = data.risk;
+                document.getElementById("recommendation").textContent = data.recommendation;
+            })
+            .catch(error => {
+                document.getElementById("loader").classList.add("hidden");
+                document.getElementById("risk").textContent = "Error: Unable to connect to the server.";
                 console.error("API Error:", error);
             });
         });

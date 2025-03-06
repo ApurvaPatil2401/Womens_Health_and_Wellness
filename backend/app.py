@@ -23,13 +23,51 @@ CORS(app)  # Enable cross-origin requests
 def index():
     """Serve the frontend index.html from templates."""
     return render_template("index.html")
+from flask import Flask, request, jsonify
+import pickle
+import numpy as np
+import pandas as pd
+from flask_cors import CORS
+from preprocess import preprocess_data
+import os
+from sklearn.preprocessing import MinMaxScaler  
 
+app = Flask(__name__)
+CORS(app)
+
+# Load models and scalers correctly
+try:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # backend/
+    MODEL_DIR = os.path.join(BASE_DIR, "../models/")  # One level up
+
+    # Load the trained Hybrid Model (GMM + PCA)
+    gmm_model_path = os.path.join(MODEL_DIR, "pcos_gmm_model.pkl")
+    scaler_path = os.path.join(MODEL_DIR, "scaler.pkl")
+
+    print("Checking scaler file:", scaler_path)
+    print("Checking model file:", gmm_model_path)
+
+    # Load the GMM model and PCA
+    with open(gmm_model_path, "rb") as file:
+        gmm_model, pca, trained_feature_names = pickle.load(file)
+
+    with open(scaler_path, "rb") as file:
+        scaler = pickle.load(file)
+
+    print("Models and scaler loaded successfully!")
+
+except FileNotFoundError as e:
+    print(" Model file missing:", str(e))
+    raise SystemExit("🔴 ERROR: Required model files are missing!")
+
+@app.route("/")
+def home():
+    return "Welcome to PCOS Health Advisor API"
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
         data = request.get_json()
         print("Received Data:", data)  # Debugging print
-
         if "features" not in data:
             return jsonify({"error": "Missing 'features' key in request"}), 400
 
