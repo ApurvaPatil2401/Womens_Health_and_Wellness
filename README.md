@@ -9,16 +9,17 @@ PCOS is a common yet underdiagnosed condition affecting women's health globally.
 
 #Key Features
  ML-Based Risk Prediction using Gaussian Mixture Model (GMM) Clustering
+ 
  Dimensionality Reduction with Principal Component Analysis (PCA) for efficiency
+ 
  Personalized Recommendations based on risk assessment
+ 
  User-Friendly Frontend for easy input and result visualization
+ 
  Deployed with Flask API and hosted on Render
 
 #Tech Stack
-Frontend: HTML5, CSS3, JavaScript
-Backend: Python (Flask)
-Machine Learning: Scikit-Learn, Pandas
-Deployment: Render, GitHub
+Frontend: HTML5, CSS3, JavaScript ; Backend: Python (Flask) ; Machine Learning: Scikit-Learn, Pandas ; Deployment: Render, GitHub
 
 #How It Works
 -User inputs details like Age, Weight, Height, BMI, Exercise habits, and symptoms (Hair Loss, Pimples, Skin Darkening, Fast Food consumption).
