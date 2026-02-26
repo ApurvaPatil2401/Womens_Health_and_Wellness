@@ -19,9 +19,12 @@ PCOS is a common yet underdiagnosed condition affecting women's health globally.
  Deployed with Flask API and hosted on Render
 
 ## Tech Stack
-Frontend: HTML5, CSS3, JavaScript ; 
-Backend: Python (Flask) ; 
-Machine Learning: Scikit-Learn, Pandas ; 
+Frontend: HTML5, CSS3, JavaScript 
+
+Backend: Python (Flask) 
+
+Machine Learning: Scikit-Learn, Pandas 
+
 Deployment: Render, GitHub
 
 ## How It Works
@@ -34,5 +37,6 @@ Deployment: Render, GitHub
 
 #Acknowledgements
 Inspired to promote Women's Health Awareness through AI solutions.
+
 
 
